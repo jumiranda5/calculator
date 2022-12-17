@@ -10,48 +10,54 @@
     </head>
     <body>
 
-        <div>
-            <p>Calculator</p>
+        <main class="flex">
+            <div class="calculator">
+                <p>Calculator</p>
+    
+                <!-- Display -->
+                <div>
+                    <p>5 +</p>
+                    <p>7</p>
+                </div>
+    
+                <!-- Container with clear, del, % and +/- buttons -->
+                <div class="clear-container flex">
+                    <button>C</button>
+                    <button>+/-</button>
+                    <button>%</button>
+                    <button>DEL</button>
+                </div>
 
-            <!-- Display -->
-            <div>
-                <p>5 +</p>
-                <p>7</p>
+                <div class="operator-container flex">
+                    <!-- Numbers, dot and equals -->
+                    <div class="numbers flex">
+                        <button>0</button>
+                        <button>.</button>
+                        <button>=</button>
+                        <button>1</button>
+                        <button>2</button>
+                        <button>3</button>
+                        <button>4</button>
+                        <button>5</button>
+                        <button>6</button>
+                        <button>7</button>
+                        <button>8</button>
+                        <button>9</button>
+                    </div>
+
+                    <!-- Operation buttons -->
+                    <div class="operators flex">
+                        <button>&divide;</button>
+                        <button>x</button>
+                        <button>-</button>
+                        <button>+</button>
+                    </div>
+                </div>
+    
             </div>
+        </main>
 
-            <!-- Container with clear, del, % and +/- buttons -->
-            <div>
-                <button>C</button>
-                <button>+/-</button>
-                <button>%</button>
-                <button>DEL</button>
-            </div>
-
-            <!-- Numbers, dot and equals -->
-            <div>
-                <button>=</button>
-                <button>.</button>
-                <button>0</button>
-                <button>1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>4</button>
-                <button>5</button>
-                <button>6</button>
-                <button>7</button>
-                <button>8</button>
-                <button>9</button>
-            </div>
-
-            <!-- Operation buttons -->
-            <div>
-                <button>&divide;</button>
-                <button>x</button>
-                <button>-</button>
-                <button>+</button>
-            </div>
-
-        </div>
+        
     
     </body>
 </html>
