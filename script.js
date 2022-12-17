@@ -1,3 +1,32 @@
+function operate(a, b, operator, isPercentage) {
+
+    let total = 0
+
+    if (isPercentage) {
+        total = percent(a, b, operator)
+    }
+    else {
+        switch(operator) {
+            case "+":
+                total = sum(a, b)
+                break
+            case "-":
+                total = subtract(a, b)
+                break
+            case "*":
+                total = multiply(a, b)
+                break
+            case "/":
+                total = divide(a, b)
+                break
+        }
+    }
+
+    return total
+
+}
+
+
 // Calculator operations:
 
 const sum = (a, b) => {
@@ -54,8 +83,8 @@ const getNumber = (x) => {
 
 const getPercent = (x) => {
     if (x.includes("%")) {
-        const parts = x.split(" ")
-        return getNumber(parts[0]) / 100
+        const number = x.replace("%", "")
+        return getNumber(number) / 100
     }
     else {
         return getNumber(x)
@@ -64,25 +93,19 @@ const getPercent = (x) => {
 
 
 console.log("====== INTEGERS ======")
-console.log(`4 + 2 = ${sum("4", "2")}`)
-console.log(`4 - 2 = ${subtract("4", "2")}`)
-console.log(`4 * 2 = ${multiply("4", "2")}`)
-console.log(`4 / 2 = ${divide("4", "2")}`)
+console.log(`4 + 2 = ${operate("4", "2", "+", false)}`)
+console.log(`4 - 2 = ${operate("4", "2", "-", false)}`)
+console.log(`4 * 2 = ${operate("4", "2", "*", false)}`)
+console.log(`4 / 2 = ${operate("4", "2", "/", false)}`)
 
 console.log("====== FLOATS ======")
-console.log(`4.5 + 2.5 = ${sum("4.5", "2.5")}`)
-console.log(`4.5 - 2.5 = ${subtract("4.5", "2.5")}`)
-console.log(`4.5 * 2.5 = ${multiply("4.5", "2.5")}`)
-console.log(`4.5 / 2.5 = ${divide("4.5", "2.5")}`)
-
-console.log("====== INTEGERS ======")
-console.log(`4 + 2 = ${sum("4", "2")}`)
-console.log(`4 - 2 = ${subtract("4", "2")}`)
-console.log(`4 * 2 = ${multiply("4", "2")}`)
-console.log(`4 / 2 = ${divide("4", "2")}`)
+console.log(`4.5 + 2.5 = ${operate("4.5", "2.5", "+", false)}`)
+console.log(`4.5 - 2.5 = ${operate("4.5", "2.5", "-", false)}`)
+console.log(`4.5 * 2.5 = ${operate("4.5", "2.5", "*", false)}`)
+console.log(`4.5 / 2.5 = ${operate("4.5", "2.5", "/", false)}`)
 
 console.log("====== PERCENTAGE ======")
-console.log(`500 + 10% = ${percent("500", "10%", "+")}`)
-console.log(`500 - 10% = ${percent("500", "10%", "-")}`)
-console.log(`500 * 10% = ${percent("500", "10%", "*")}`)
-console.log(`500 / 10% = ${percent("500", "10%", "/")}`)
+console.log(`500 + 10% = ${operate("500", "10%", "+", true)}`)
+console.log(`500 - 10% = ${operate("500", "10%", "-", true)}`)
+console.log(`500 * 10% = ${operate("500", "10%", "*", true)}`)
+console.log(`500 / 10% = ${operate("500", "10%", "/", true)}`)
