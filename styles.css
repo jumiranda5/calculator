@@ -4,10 +4,6 @@
     padding: 0;
 }
 
-body {
-    background-color: #ffd1ac;
-}
-
 /* -----------------------------------
                STRUCTURE
 -------------------------------------- */
@@ -27,14 +23,29 @@ main {
 
 .calculator {
     width: 360px;
-    background-color: #FFFFFF;
+}
+
+.title {
+    padding: 12px;
+}
+
+.display .cumulative {
+    padding: 0 24px;
+}
+
+.display .total {
+    padding: 8px 24px 16px;
 }
 
 button {
-    width: 90px;
     height: 90px;
     cursor: pointer;
     background: none;
+    border: none;
+}
+
+.clear-container button {
+    width: 25%;
 }
 
 .numbers {
@@ -42,6 +53,98 @@ button {
     width: 75%;
 }
 
+.numbers button {
+    width: 33.3334%;
+}
+
 .operators {
     width: 25%;
+    flex-flow: column wrap;
+}
+
+/* -----------------------------------
+           FONTS AND COLORS
+-------------------------------------- */
+
+body {
+    background-color: #ffe0c7;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.calculator {
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ff4e1d;
+}
+
+.display {
+    border: 0.5px solid #b4b4b4;
+}
+
+.display .cumulative {
+    text-align: end;
+    font-size: 20px;
+    color: #1a1a1a;
+    font-weight: 500;
+}
+
+.display .total {
+    text-align: end;
+    font-size: 32px;
+    font-weight: 500;
+    color: #ff4e1d;
+}
+
+.clear-container,
+.operator-container {
+    border-right: 0.5px solid #b4b4b4;
+}
+
+button {
+    border-bottom: 0.5px solid #b4b4b4;
+    border-left: 0.5px solid #b4b4b4;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: #1a1a1a;
+}
+
+button:hover {
+    background-color: #f7f7f7;
+}
+
+button:active {
+    background-color: #dedede;
+}
+
+.operators button {
+    color: #ff4e1d;
+    background-color: #ededed;
+    font-size: 36px;
+}
+
+.operators button:hover {
+    background-color: #dcdcdc;
+}
+
+.operators button:active {
+    background-color: #cccccc;
+}
+
+.btn-equal {
+    background-color: #ff4e1d;
+    color: #FFFFFF;
+}
+
+.btn-equal:hover {
+    background-color: #f03f0e;
+}
+
+.btn-equal:active {
+    background-color: #e03000;
 }
