@@ -1,7 +1,11 @@
 // Vars
 let display = ""
-let cumulative = ""
-let total = 0
+let operationTotal = 0
+let operand1 = ""
+let operand2 = ""
+let operator = ""
+let operatorCount = 0
+
 
 // Elements
 const displayCumulative = document.querySelector('#cumulative')
@@ -16,23 +20,91 @@ const six = document.querySelector('#six')
 const seven = document.querySelector('#seven')
 const eight = document.querySelector('#eight')
 const nine = document.querySelector('#nine')
+const btnDivide = document.querySelector('#divide')
+const btnMultiply = document.querySelector('#multiply')
+const btnSubtract = document.querySelector('#subtract')
+const btnAdd = document.querySelector('#add')
+const btnEquals = document.querySelector('#equals')
 
-zero.addEventListener('click', () => updateDisplay(0));
-one.addEventListener('click', () => updateDisplay(1));
-two.addEventListener('click', () => updateDisplay(2));
-three.addEventListener('click', () => updateDisplay(3));
-four.addEventListener('click', () => updateDisplay(4));
-five.addEventListener('click', () => updateDisplay(5));
-six.addEventListener('click', () => updateDisplay(6));
-seven.addEventListener('click', () => updateDisplay(7));
-eight.addEventListener('click', () => updateDisplay(8));
-nine.addEventListener('click', () => updateDisplay(9));
+zero.addEventListener('click', () => updateOperand(0));
+one.addEventListener('click', () => updateOperand(1));
+two.addEventListener('click', () => updateOperand(2));
+three.addEventListener('click', () => updateOperand(3));
+four.addEventListener('click', () => updateOperand(4));
+five.addEventListener('click', () => updateOperand(5));
+six.addEventListener('click', () => updateOperand(6));
+seven.addEventListener('click', () => updateOperand(7));
+eight.addEventListener('click', () => updateOperand(8));
+nine.addEventListener('click', () => updateOperand(9));
+btnDivide.addEventListener('click', () => updateOperator("/"))
+btnMultiply.addEventListener('click', () => updateOperator("*"))
+btnSubtract.addEventListener('click', () => updateOperator("-"))
+btnAdd.addEventListener('click', () => updateOperator("+"))
+btnEquals.addEventListener('click', () => equals())
 
 
-// Update display
-function updateDisplay(n) {
+// Operands => Concatenate string to display and update operands strings
+function updateOperand(n) {
     display = display + n
-    displayTotal.textContent = display
+    
+    if (operatorCount === 0) {
+        operand1 = display
+    }
+    else if (operatorCount === 1) {
+        operand2 = operand2 + n
+    }
+    else {
+        operand2 = display
+    }
+
+    displayTotal.innerHTML = display
+}
+
+// Operator => concatenate string or perform operation
+function updateOperator(op) {
+
+    let opEntity = op
+    if (op === "/") opEntity = "&divide;"
+    else if (op === "*") opEntity = "&times;"
+
+    if (operatorCount === 0) {
+        // concatenate operator on display
+        display = display + opEntity
+        displayTotal.innerHTML = display
+    }
+    else if (operatorCount > 0 && operand2 === "") {
+        // replace operator
+        displayCumulative.innerHTML = operand1 + opEntity
+    }
+    else {
+        // perform operation and update display
+        display = ""
+        operationTotal = operate(operand1, operand2, operator, false)
+        operand1 = operationTotal.toString()
+        operand2 = ""
+        displayCumulative.innerHTML = operationTotal + opEntity
+        displayTotal.textContent = ""
+    }
+
+    operator = op
+    operatorCount++
+}
+
+
+// Equals => run operation, update display and vars 
+function equals() {
+    if (operand2 === "") {
+        operationTotal = operand1
+    }
+    else {
+        operationTotal = operate(operand1, operand2, operator, false)
+        display = operationTotal.toString()
+        operand1 = operationTotal.toString()
+        operand2 = ""
+        operatorCount = 0
+    }
+    displayCumulative.textContent = ""
+    displayTotal.textContent = operationTotal
 }
 
 
