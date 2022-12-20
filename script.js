@@ -1,3 +1,13 @@
+/*
+    TODO:
+        - Alow negative number
+        - DEL
+        - Percentage
+        - Floats
+        - Toggle +/-
+*/
+
+
 // Vars
 let display = ""
 let operationTotal = 0
@@ -25,6 +35,7 @@ const btnMultiply = document.querySelector('#multiply')
 const btnSubtract = document.querySelector('#subtract')
 const btnAdd = document.querySelector('#add')
 const btnEquals = document.querySelector('#equals')
+const btnClear = document.querySelector('#clear')
 
 zero.addEventListener('click', () => updateOperand(0));
 one.addEventListener('click', () => updateOperand(1));
@@ -41,6 +52,7 @@ btnMultiply.addEventListener('click', () => updateOperator("*"))
 btnSubtract.addEventListener('click', () => updateOperator("-"))
 btnAdd.addEventListener('click', () => updateOperator("+"))
 btnEquals.addEventListener('click', () => equals())
+btnClear.addEventListener('click', () => clear())
 
 
 // Operands => Concatenate string to display and update operands strings
@@ -105,6 +117,19 @@ function equals() {
     }
     displayCumulative.textContent = ""
     displayTotal.textContent = operationTotal
+}
+
+
+// Clear => reset display and vars values
+function clear() {
+    displayCumulative.textContent = ""
+    displayTotal.textContent = ""
+    display = ""
+    operationTotal = 0
+    operand1 = ""
+    operand2 = ""
+    operator = ""
+    operatorCount = 0
 }
 
 
