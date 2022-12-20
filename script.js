@@ -1,6 +1,5 @@
 /*
     TODO:
-        - Alow negative number
         - DEL
         - Percentage
         - Floats
@@ -10,6 +9,7 @@
 
 // Vars
 let display = ""
+let cumulative = ""
 let operationTotal = 0
 let operand1 = ""
 let operand2 = ""
@@ -49,7 +49,7 @@ eight.addEventListener('click', () => updateOperand(8));
 nine.addEventListener('click', () => updateOperand(9));
 btnDivide.addEventListener('click', () => updateOperator("/"))
 btnMultiply.addEventListener('click', () => updateOperator("*"))
-btnSubtract.addEventListener('click', () => updateOperator("-"))
+btnSubtract.addEventListener('click', () => handleNegative())
 btnAdd.addEventListener('click', () => updateOperator("+"))
 btnEquals.addEventListener('click', () => equals())
 btnClear.addEventListener('click', () => clear())
@@ -72,8 +72,11 @@ function updateOperand(n) {
     displayTotal.innerHTML = display
 }
 
+
 // Operator => concatenate string or perform operation
 function updateOperator(op) {
+
+    if (display === "" || display === "-") return
 
     let opEntity = op
     if (op === "/") opEntity = "&divide;"
@@ -86,6 +89,7 @@ function updateOperator(op) {
     }
     else if (operatorCount > 0 && operand2 === "") {
         // replace operator
+        cumulative = operand1 + op
         displayCumulative.innerHTML = operand1 + opEntity
     }
     else {
@@ -94,12 +98,46 @@ function updateOperator(op) {
         operationTotal = operate(operand1, operand2, operator, false)
         operand1 = operationTotal.toString()
         operand2 = ""
+        cumulative = operationTotal + op
         displayCumulative.innerHTML = operationTotal + opEntity
         displayTotal.textContent = ""
     }
 
     operator = op
     operatorCount++
+}
+
+
+// Handle subtract => use the operator in negative number or in operation
+function handleNegative() {
+
+    // Don't repeat -
+    if (display.slice(-1) === "-") return
+
+    if (operatorCount === 0 && display === "") {
+        // Negative first number
+        updateOperand("-")
+    }
+    else if (operatorCount === 1) {
+        if (operator === "+") {
+            // remove + from display
+            display = display.replace("+", "")
+            updateOperand("-")
+        }
+        else {
+            updateOperand("-")
+        }
+    }
+    else if (operatorCount > 1 && operator === "+") {
+        // replace + on cumulative
+        operator = "-"
+        cumulative = cumulative.replace("+", "-")
+        console.log(cumulative)
+        displayCumulative.innerHTML = cumulative
+    }
+    else {
+        updateOperator("-")
+    }
 }
 
 
