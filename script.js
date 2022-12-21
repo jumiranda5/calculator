@@ -229,7 +229,7 @@ function addPercentSymbol() {
 // Function to perform operations
 function operate(a, b, operator, isPercentage) {
 
-    let total = 0
+    let total = 0 
 
     if (isPercentage) {
         total = percent(a, b, operator)
@@ -250,6 +250,8 @@ function operate(a, b, operator, isPercentage) {
                 break
         }
     }
+
+    if (total === "") return ""
 
     let roundedTotal = Math.round(total * 1000000) / 1000000;
 
@@ -273,6 +275,7 @@ const multiply = (a, b) => {
 }
 
 const divide = (a, b) => {
+    if (b === "0") return ""
     return getNumber(a) / getNumber(b)
 }
 
