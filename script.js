@@ -114,6 +114,7 @@ function updateOperator(op) {
 // Handle subtract => use the operator in negative number or in operation
 function handleNegative() {
 
+
     // Don't repeat -
     if (display.slice(-1) === "-") return
 
@@ -121,15 +122,10 @@ function handleNegative() {
         // Negative first number
         updateOperand("-")
     }
-    else if (operatorCount === 1) {
-        if (operator === "+") {
-            // remove + from display
-            display = display.replace("+", "")
-            updateOperand("-")
-        }
-        else {
-            updateOperand("-")
-        }
+    else if (operatorCount === 1 && operator === "+" && display.slice(-1) === "+") {
+        // replace + on display
+        display = display.replace("+", "")
+        updateOperand("-")
     }
     else if (operatorCount > 1 && operator === "+") {
         // replace + on cumulative
@@ -179,7 +175,6 @@ function del() {
 
     if (operatorCount > 1 && display === "") {
         // transfer text from displayCumulative to display
-        console.log("transfer text from displayCumulative to display")
         displayTotal.innerHTML = displayCumulative.innerHTML
         displayCumulative.textContent = ""
         display = cumulative
