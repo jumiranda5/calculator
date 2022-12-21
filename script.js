@@ -1,6 +1,5 @@
 /*
     TODO:
-        - Floats
         - Toggle +/-
         - Handle division by 0
 */
@@ -29,6 +28,7 @@ const six = document.querySelector('#six')
 const seven = document.querySelector('#seven')
 const eight = document.querySelector('#eight')
 const nine = document.querySelector('#nine')
+const dot = document.querySelector('#dot')
 const btnDivide = document.querySelector('#divide')
 const btnMultiply = document.querySelector('#multiply')
 const btnSubtract = document.querySelector('#subtract')
@@ -38,16 +38,17 @@ const btnClear = document.querySelector('#clear')
 const btnDel = document.querySelector('#del')
 const btnPercentage = document.querySelector('#percentage')
 
-zero.addEventListener('click', () => updateOperand(0));
-one.addEventListener('click', () => updateOperand(1));
-two.addEventListener('click', () => updateOperand(2));
-three.addEventListener('click', () => updateOperand(3));
-four.addEventListener('click', () => updateOperand(4));
-five.addEventListener('click', () => updateOperand(5));
-six.addEventListener('click', () => updateOperand(6));
-seven.addEventListener('click', () => updateOperand(7));
-eight.addEventListener('click', () => updateOperand(8));
-nine.addEventListener('click', () => updateOperand(9));
+zero.addEventListener('click', () => updateOperand(0))
+one.addEventListener('click', () => updateOperand(1))
+two.addEventListener('click', () => updateOperand(2))
+three.addEventListener('click', () => updateOperand(3))
+four.addEventListener('click', () => updateOperand(4))
+five.addEventListener('click', () => updateOperand(5))
+six.addEventListener('click', () => updateOperand(6))
+seven.addEventListener('click', () => updateOperand(7))
+eight.addEventListener('click', () => updateOperand(8))
+nine.addEventListener('click', () => updateOperand(9))
+dot.addEventListener('click', () => updateOperand("."))
 btnDivide.addEventListener('click', () => updateOperator("/"))
 btnMultiply.addEventListener('click', () => updateOperator("*"))
 btnSubtract.addEventListener('click', () => handleNegative())
@@ -66,18 +67,19 @@ function setDisplayWithEntities(displayText) {
 
 // Operands => Concatenate string to display and update operands strings
 function updateOperand(n) {
-    display = display + n
+
+    if (n === "." && display.slice(-1) === ".") return
     
     if (operatorCount === 0) {
-        operand1 = display
-    }
-    else if (operatorCount === 1) {
-        operand2 = operand2 + n
+        if (n === "." && operand1.includes(".")) return
+        operand1 = operand1 + n
     }
     else {
-        operand2 = display
+        if (n === "." && operand2.includes(".")) return
+        operand2 = operand2 + n
     }
 
+    display = display + n
     displayTotal.innerHTML = setDisplayWithEntities(display)
 }
 
@@ -249,7 +251,9 @@ function operate(a, b, operator, isPercentage) {
         }
     }
 
-    return total
+    let roundedTotal = Math.round(total * 1000000) / 1000000;
+
+    return roundedTotal
 
 }
 
@@ -317,9 +321,3 @@ const getPercent = (x) => {
         return getNumber(x)
     }
 }
-
-console.log(`500 + 10% = ${percent("500", "10%", "+")}`)
-console.log(`500 - 10% = ${percent("500", "10%", "-")}`)
-console.log(`500 * 10% = ${percent("500", "10%", "*")}`)
-console.log(`500 / 10% = ${percent("500", "10%", "/")}`)
-console.log(`10% * 500 = ${percent("500", "10%", "*")}`)
