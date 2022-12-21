@@ -1,8 +1,8 @@
 /*
     TODO:
-        - Percentage
         - Floats
         - Toggle +/-
+        - Handle division by 0
 */
 
 
@@ -36,6 +36,7 @@ const btnAdd = document.querySelector('#add')
 const btnEquals = document.querySelector('#equals')
 const btnClear = document.querySelector('#clear')
 const btnDel = document.querySelector('#del')
+const btnPercentage = document.querySelector('#percentage')
 
 zero.addEventListener('click', () => updateOperand(0));
 one.addEventListener('click', () => updateOperand(1));
@@ -54,6 +55,7 @@ btnAdd.addEventListener('click', () => updateOperator("+"))
 btnEquals.addEventListener('click', () => equals())
 btnClear.addEventListener('click', () => clear())
 btnDel.addEventListener('click', () => del())
+btnPercentage.addEventListener('click', () => addPercentSymbol())
 
 
 // Replace * and / with html entities
@@ -85,6 +87,9 @@ function updateOperator(op) {
 
     if (display === "" || display === "-") return
 
+    let isPercentage = false
+    if (display.includes("%") || cumulative.includes("%")) isPercentage = true
+
     if (operatorCount === 0) {
         // concatenate operator on display
         display = display + op
@@ -98,7 +103,7 @@ function updateOperator(op) {
     else {
         // perform operation and update display
         display = ""
-        operationTotal = operate(operand1, operand2, operator, false)
+        operationTotal = operate(operand1, operand2, operator, isPercentage)
         operand1 = operationTotal.toString()
         operand2 = ""
         cumulative = operationTotal + op
@@ -142,11 +147,15 @@ function handleNegative() {
 
 // Equals => run operation, update display and vars 
 function equals() {
+
+    let isPercentage = false
+    if (operand1.includes("%") || operand2.includes("%")) isPercentage = true
+
     if (operand2 === "") {
         operationTotal = operand1
     }
     else {
-        operationTotal = operate(operand1, operand2, operator, false)
+        operationTotal = operate(operand1, operand2, operator, isPercentage)
         display = operationTotal.toString()
         operand1 = operationTotal.toString()
         operand2 = ""
@@ -207,6 +216,13 @@ function del() {
 
 }
 
+
+// Handle percentage symbol
+function addPercentSymbol() {
+    const lastChar = display.slice(-1)
+    if (lastChar === NaN || display === "") return
+    updateOperand("%")
+}
 
 // Function to perform operations
 function operate(a, b, operator, isPercentage) {
@@ -301,3 +317,9 @@ const getPercent = (x) => {
         return getNumber(x)
     }
 }
+
+console.log(`500 + 10% = ${percent("500", "10%", "+")}`)
+console.log(`500 - 10% = ${percent("500", "10%", "-")}`)
+console.log(`500 * 10% = ${percent("500", "10%", "*")}`)
+console.log(`500 / 10% = ${percent("500", "10%", "/")}`)
+console.log(`10% * 500 = ${percent("500", "10%", "*")}`)
