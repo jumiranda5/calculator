@@ -1,6 +1,5 @@
 /*
     TODO:
-        - DEL
         - Percentage
         - Floats
         - Toggle +/-
@@ -36,6 +35,7 @@ const btnSubtract = document.querySelector('#subtract')
 const btnAdd = document.querySelector('#add')
 const btnEquals = document.querySelector('#equals')
 const btnClear = document.querySelector('#clear')
+const btnDel = document.querySelector('#del')
 
 zero.addEventListener('click', () => updateOperand(0));
 one.addEventListener('click', () => updateOperand(1));
@@ -53,6 +53,13 @@ btnSubtract.addEventListener('click', () => handleNegative())
 btnAdd.addEventListener('click', () => updateOperator("+"))
 btnEquals.addEventListener('click', () => equals())
 btnClear.addEventListener('click', () => clear())
+btnDel.addEventListener('click', () => del())
+
+
+// Replace * and / with html entities
+function setDisplayWithEntities(displayText) {
+    return displayText.replace("*", "&times;").replace("/", "&divide;")
+}
 
 
 // Operands => Concatenate string to display and update operands strings
@@ -69,7 +76,7 @@ function updateOperand(n) {
         operand2 = display
     }
 
-    displayTotal.innerHTML = display
+    displayTotal.innerHTML = setDisplayWithEntities(display)
 }
 
 
@@ -78,19 +85,15 @@ function updateOperator(op) {
 
     if (display === "" || display === "-") return
 
-    let opEntity = op
-    if (op === "/") opEntity = "&divide;"
-    else if (op === "*") opEntity = "&times;"
-
     if (operatorCount === 0) {
         // concatenate operator on display
-        display = display + opEntity
-        displayTotal.innerHTML = display
+        display = display + op
+        displayTotal.innerHTML = setDisplayWithEntities(display)
     }
     else if (operatorCount > 0 && operand2 === "") {
         // replace operator
         cumulative = operand1 + op
-        displayCumulative.innerHTML = operand1 + opEntity
+        displayCumulative.innerHTML = setDisplayWithEntities(cumulative)
     }
     else {
         // perform operation and update display
@@ -99,7 +102,7 @@ function updateOperator(op) {
         operand1 = operationTotal.toString()
         operand2 = ""
         cumulative = operationTotal + op
-        displayCumulative.innerHTML = operationTotal + opEntity
+        displayCumulative.innerHTML = setDisplayWithEntities(cumulative)
         displayTotal.textContent = ""
     }
 
@@ -168,6 +171,45 @@ function clear() {
     operand2 = ""
     operator = ""
     operatorCount = 0
+}
+
+
+// DEL => delete character by character
+function del() {
+
+    if (operatorCount > 1 && display === "") {
+        // transfer text from displayCumulative to display
+        console.log("transfer text from displayCumulative to display")
+        displayTotal.innerHTML = displayCumulative.innerHTML
+        displayCumulative.textContent = ""
+        display = cumulative
+        cumulative = ""
+    }
+
+    // update operator count
+    const lastChar = display.slice(-1)
+    if (lastChar === "+" || lastChar === "*" || lastChar === "/") {
+        operatorCount--
+    }
+    else if (lastChar === "-") {
+        const length = display.length;
+        const pos = length - 2
+        const lastPos = length -1
+        const prevChar = display.slice(pos, lastPos)    
+        if (prevChar !== "+" && prevChar !== "-" && prevChar !== "*" && prevChar !== "/") {
+            operatorCount--
+        }
+    }
+
+    // delete last char from display
+    const newLength = display.length - 1;
+    display = display.slice(0, newLength)
+
+    // update display text
+    displayTotal.innerHTML = setDisplayWithEntities(display)
+
+    if (display === "" && cumulative === "") clear()
+
 }
 
 
