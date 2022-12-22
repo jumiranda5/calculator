@@ -1,10 +1,3 @@
-/*
-    TODO:
-        - Toggle +/-
-        - Handle division by 0
-*/
-
-
 // Vars
 let display = ""
 let cumulative = ""
@@ -37,6 +30,7 @@ const btnEquals = document.querySelector('#equals')
 const btnClear = document.querySelector('#clear')
 const btnDel = document.querySelector('#del')
 const btnPercentage = document.querySelector('#percentage')
+const btnToggleNegative = document.querySelector('#toggle')
 
 zero.addEventListener('click', () => updateOperand(0))
 one.addEventListener('click', () => updateOperand(1))
@@ -57,6 +51,7 @@ btnEquals.addEventListener('click', () => equals())
 btnClear.addEventListener('click', () => clear())
 btnDel.addEventListener('click', () => del())
 btnPercentage.addEventListener('click', () => addPercentSymbol())
+btnToggleNegative.addEventListener('click', () => toggleNegative())
 
 
 // Replace * and / with html entities
@@ -225,6 +220,46 @@ function addPercentSymbol() {
     if (lastChar === NaN || display === "") return
     updateOperand("%")
 }
+
+
+// Toggle negative/positive
+function toggleNegative() {
+    if (operatorCount === 0) {
+        // toggle operand 1
+        if (display.charAt(0) === "-") display = display.slice(1)
+        else display = "-" + display
+
+        operand1 = display
+        displayTotal.innerHTML = setDisplayWithEntities(display)
+    }
+    else {
+        // toggle operator or operand2
+        if (operator === "+") {
+            operator = "-"
+        }
+        else if (operator === "-") {
+            operator = "+"
+        }
+        else {
+            if (operand2.charAt(0) === "-") operand2 = operand2.slice(1)
+            else operand2 = "-" + operand2
+        }
+
+        // Update display
+        if (operatorCount === 1) {   
+            display = operand1 + operator + operand2
+            displayTotal.innerHTML = setDisplayWithEntities(display)
+        }
+        else {
+            cumulative = operand1 + operator
+            display = operand2
+            displayCumulative.innerHTML = setDisplayWithEntities(cumulative)
+        }
+        displayTotal.innerHTML = setDisplayWithEntities(display)
+    }
+
+}
+
 
 // Function to perform operations
 function operate(a, b, operator, isPercentage) {
