@@ -8,9 +8,22 @@ let operator = ""
 let operatorCount = 0
 
 
-// Elements
+/* -------------------------------------
+               DISPLAY
+---------------------------------------- */
+
 const displayCumulative = document.querySelector('#cumulative')
 const displayTotal = document.querySelector('#total')
+
+// Replace * and / with html entities
+function setDisplayWithEntities(displayText) {
+    return displayText.replace("*", "&times;").replace("/", "&divide;")
+}
+
+/* -------------------------------------
+               NUMBERS
+---------------------------------------- */
+
 const zero = document.querySelector('#zero')
 const one = document.querySelector('#one')
 const two = document.querySelector('#two')
@@ -22,15 +35,6 @@ const seven = document.querySelector('#seven')
 const eight = document.querySelector('#eight')
 const nine = document.querySelector('#nine')
 const dot = document.querySelector('#dot')
-const btnDivide = document.querySelector('#divide')
-const btnMultiply = document.querySelector('#multiply')
-const btnSubtract = document.querySelector('#subtract')
-const btnAdd = document.querySelector('#add')
-const btnEquals = document.querySelector('#equals')
-const btnClear = document.querySelector('#clear')
-const btnDel = document.querySelector('#del')
-const btnPercentage = document.querySelector('#percentage')
-const btnToggleNegative = document.querySelector('#toggle')
 
 zero.addEventListener('click', () => updateOperand(0))
 one.addEventListener('click', () => updateOperand(1))
@@ -43,24 +47,8 @@ seven.addEventListener('click', () => updateOperand(7))
 eight.addEventListener('click', () => updateOperand(8))
 nine.addEventListener('click', () => updateOperand(9))
 dot.addEventListener('click', () => updateOperand("."))
-btnDivide.addEventListener('click', () => updateOperator("/"))
-btnMultiply.addEventListener('click', () => updateOperator("*"))
-btnSubtract.addEventListener('click', () => handleNegative())
-btnAdd.addEventListener('click', () => updateOperator("+"))
-btnEquals.addEventListener('click', () => equals())
-btnClear.addEventListener('click', () => clear())
-btnDel.addEventListener('click', () => del())
-btnPercentage.addEventListener('click', () => addPercentSymbol())
-btnToggleNegative.addEventListener('click', () => toggleNegative())
 
-
-// Replace * and / with html entities
-function setDisplayWithEntities(displayText) {
-    return displayText.replace("*", "&times;").replace("/", "&divide;")
-}
-
-
-// Operands => Concatenate string to display and update operands strings
+// Concatenate string to display and update operands strings
 function updateOperand(n) {
 
     if (n === "." && display.slice(-1) === ".") return
@@ -79,7 +67,27 @@ function updateOperand(n) {
 }
 
 
-// Operator => concatenate string or perform operation
+/* -------------------------------------
+               OPERATORS
+---------------------------------------- */
+
+const btnDivide = document.querySelector('#divide')
+const btnMultiply = document.querySelector('#multiply')
+const btnSubtract = document.querySelector('#subtract')
+const btnAdd = document.querySelector('#add')
+const btnEquals = document.querySelector('#equals')
+const btnToggleNegative = document.querySelector('#toggle')
+const btnPercentage = document.querySelector('#percentage')
+
+btnDivide.addEventListener('click', () => updateOperator("/"))
+btnMultiply.addEventListener('click', () => updateOperator("*"))
+btnSubtract.addEventListener('click', () => handleNegative())
+btnAdd.addEventListener('click', () => updateOperator("+"))
+btnEquals.addEventListener('click', () => equals())
+btnToggleNegative.addEventListener('click', () => toggleNegative())
+btnPercentage.addEventListener('click', () => addPercentSymbol())
+
+// Concatenate string or perform operation
 function updateOperator(op) {
 
     if (display === "" || display === "-") return
@@ -112,8 +120,7 @@ function updateOperator(op) {
     operatorCount++
 }
 
-
-// Handle subtract => use the operator in negative number or in operation
+// Handle subtract symbol => use the operator in negative number or in operation
 function handleNegative() {
 
 
@@ -140,87 +147,6 @@ function handleNegative() {
         updateOperator("-")
     }
 }
-
-
-// Equals => run operation, update display and vars 
-function equals() {
-
-    let isPercentage = false
-    if (operand1.includes("%") || operand2.includes("%")) isPercentage = true
-
-    if (operand2 === "") {
-        operationTotal = operand1
-    }
-    else {
-        operationTotal = operate(operand1, operand2, operator, isPercentage)
-        display = operationTotal.toString()
-        operand1 = operationTotal.toString()
-        operand2 = ""
-        operatorCount = 0
-    }
-    displayCumulative.textContent = ""
-    displayTotal.textContent = operationTotal
-}
-
-
-// Clear => reset display and vars values
-function clear() {
-    displayCumulative.textContent = ""
-    displayTotal.textContent = ""
-    display = ""
-    operationTotal = 0
-    operand1 = ""
-    operand2 = ""
-    operator = ""
-    operatorCount = 0
-}
-
-
-// DEL => delete character by character
-function del() {
-
-    if (operatorCount > 1 && display === "") {
-        // transfer text from displayCumulative to display
-        displayTotal.innerHTML = displayCumulative.innerHTML
-        displayCumulative.textContent = ""
-        display = cumulative
-        cumulative = ""
-    }
-
-    // update operator count
-    const lastChar = display.slice(-1)
-    if (lastChar === "+" || lastChar === "*" || lastChar === "/") {
-        operatorCount--
-    }
-    else if (lastChar === "-") {
-        const length = display.length;
-        const pos = length - 2
-        const lastPos = length -1
-        const prevChar = display.slice(pos, lastPos)    
-        if (prevChar !== "+" && prevChar !== "-" && prevChar !== "*" && prevChar !== "/") {
-            operatorCount--
-        }
-    }
-
-    // delete last char from display
-    const newLength = display.length - 1;
-    display = display.slice(0, newLength)
-
-    // update display text
-    displayTotal.innerHTML = setDisplayWithEntities(display)
-
-    if (display === "" && cumulative === "") clear()
-
-}
-
-
-// Handle percentage symbol
-function addPercentSymbol() {
-    const lastChar = display.slice(-1)
-    if (lastChar === NaN || display === "") return
-    updateOperand("%")
-}
-
 
 // Toggle negative/positive
 function toggleNegative() {
@@ -260,6 +186,97 @@ function toggleNegative() {
 
 }
 
+// Handle percentage symbol
+function addPercentSymbol() {
+    const lastChar = display.slice(-1)
+    if (lastChar === NaN || display === "") return
+    updateOperand("%")
+}
+
+// Run operation, update display and vars 
+function equals() {
+
+    let isPercentage = false
+    if (operand1.includes("%") || operand2.includes("%")) isPercentage = true
+
+    if (operand2 === "") {
+        operationTotal = operand1
+    }
+    else {
+        operationTotal = operate(operand1, operand2, operator, isPercentage)
+        display = operationTotal.toString()
+        operand1 = operationTotal.toString()
+        operand2 = ""
+        operatorCount = 0
+    }
+    displayCumulative.textContent = ""
+    displayTotal.textContent = operationTotal
+}
+
+
+/* -------------------------------------
+              CLEAR AND DEL
+---------------------------------------- */
+
+const btnClear = document.querySelector('#clear')
+const btnDel = document.querySelector('#del')
+
+btnClear.addEventListener('click', () => clear())
+btnDel.addEventListener('click', () => del())
+
+// Clear => reset display and vars values
+function clear() {
+    displayCumulative.textContent = ""
+    displayTotal.textContent = ""
+    display = ""
+    operationTotal = 0
+    operand1 = ""
+    operand2 = ""
+    operator = ""
+    operatorCount = 0
+}
+
+// DEL => delete character by character
+function del() {
+
+    if (operatorCount > 1 && display === "") {
+        // transfer text from displayCumulative to display
+        displayTotal.innerHTML = displayCumulative.innerHTML
+        displayCumulative.textContent = ""
+        display = cumulative
+        cumulative = ""
+    }
+
+    // update operator count
+    const lastChar = display.slice(-1)
+    if (lastChar === "+" || lastChar === "*" || lastChar === "/") {
+        operatorCount--
+    }
+    else if (lastChar === "-") {
+        const length = display.length;
+        const pos = length - 2
+        const lastPos = length -1
+        const prevChar = display.slice(pos, lastPos)    
+        if (prevChar !== "+" && prevChar !== "-" && prevChar !== "*" && prevChar !== "/") {
+            operatorCount--
+        }
+    }
+
+    // delete last char from display
+    const newLength = display.length - 1;
+    display = display.slice(0, newLength)
+
+    // update display text
+    displayTotal.innerHTML = setDisplayWithEntities(display)
+
+    if (display === "" && cumulative === "") clear()
+
+}
+
+
+/* -------------------------------------
+               CALCULATIONS
+---------------------------------------- */
 
 // Function to perform operations
 function operate(a, b, operator, isPercentage) {
@@ -295,7 +312,7 @@ function operate(a, b, operator, isPercentage) {
 }
 
 
-// Calculator operations:
+// Math
 
 const sum = (a, b) => {
     return getNumber(a) + getNumber(b)
